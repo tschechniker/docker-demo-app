@@ -6,9 +6,3 @@ services:
     build: .
     ports:
     - "80:9000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/hostname"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
