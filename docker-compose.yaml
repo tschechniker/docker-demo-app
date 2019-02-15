@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  demo-app:
+    image: 192.168.50.14:5000/demo-app:${TAG}
+    build: .
+    ports:
+    - "80:9000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/hostname"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
