@@ -8,20 +8,16 @@ pipeline {
     stages{
         stage("Build") {
             steps {
-                dir("docker-demo-app"){
                     echo "Building.."
                     withMaven(maven: 'maven'){
                         sh "mvn clean package"
                     }
-                }
             }
         }
         stage("docker") {
             steps {
-                dir("docker-demo-app"){
                     sh 'docker-compose build'
                     sh 'docker-compose push'
-                }
             }
         }
 
