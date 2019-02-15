@@ -2,8 +2,6 @@ version: '3'
 
 services:
   demo-app:
-    environment:
-      - TAG=latest
     image: 192.168.50.14:5000/demo-app:${TAG}
     build: .
     ports:
