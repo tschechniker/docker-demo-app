@@ -5,30 +5,26 @@ pipeline {
         TAG = "${env.BUILD_NUMBER}"
     }
 
-    stages{
+    stages {
         stage("Build") {
             steps {
-                dir("docker-demo-app"){
-                    echo "Building.."
-                    withMaven(maven: 'maven'){
-                        sh "mvn clean package"
-                    }
+                echo "Building.."
+                withMaven(maven: 'maven') {
+                    sh "mvn clean package"
                 }
             }
         }
         stage("docker") {
             steps {
-                dir("docker-demo-app"){
-                    sh 'docker-compose build'
-                    sh 'docker-compose push'
-                }
+                sh 'docker-compose build'
+                sh 'docker-compose push'
             }
         }
 
         stage("deploy") {
             steps {
                 script {
-                    if(sh (script: 'docker service ls',returnStdout: true).contains("demo-app")){
+                    if (sh(script: 'docker service ls', returnStdout: true).contains("demo-app")) {
                         sh "docker service update --image registry:5000/demo-app:${env.BUILD_NUMBER} demo-app"
                     } else {
                         sh "docker service create --name demo-app --constraint=node.role==worker --publish published=80,target=9000 registry:5000/demo-app:${env.BUILD_NUMBER}"
